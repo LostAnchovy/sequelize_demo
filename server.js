@@ -10,7 +10,6 @@ var bodyparser = require('body-parser');
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({extended:false}));
 
-
 const db = require('./config/db.config.js')
 
 db.connection.sync()
@@ -18,7 +17,7 @@ db.connection.sync()
 .catch((err)=>console.log('Error creating database'))
 
 //======================Models========================//
-// Models that have been build out by hand in the test_db. Sequelize also adds backend validations which i have incorporated into the code below under validate.
+//Models that have been build out by hand in the test_db. Sequelize also adds backend validations which i have incorporated into the code below under validate.
 const User = db.connection.define('user', {
     firstname: {
         type: Sequelize.STRING,
@@ -68,8 +67,9 @@ app.use(session({
     resave: false,
     saveUninitialized: true
   }))
-// bring in express-session 
+// bring in express-session and provide connection token
 
+//==================== ejs routes ===============//
 app.get('/form', (req, res)=>{
     res.render('form')
 })
@@ -88,15 +88,7 @@ app.get ('/' ,(req, res) =>{
 app.get ('/home' ,(req, res) =>{
     res.render('home')
 })
-
-app.get('/api/users', (req, res)=>{
-    User.findAll(). then((users)=>{
-        res.json(users)
-    }).catch((err)=>{
-        res.send(500).send({error:'could not retrieve user'})
-    })
-})
-
+//==================== ejs routes ===============//
 
 app.post('/api/pets', (req,res)=>{
     Pet.create({
@@ -106,11 +98,13 @@ app.post('/api/pets', (req,res)=>{
     }). then((pet) =>{
         res.json(pet)
     }). catch((err)=>{
-        res.status(err).send({
+        res.status(501).send({
             error: "could not add new user to the database"
         })
     })
 })
+
+// creates pet and insert it into the database
 
 app.get('/api/pets', (req,res)=>{
     Pet.findAll().then((pet)=>{
@@ -119,6 +113,8 @@ app.get('/api/pets', (req,res)=>{
         console.log('there was an error getting all the pets')
     })
 })
+
+// retrieves all pets
 
 app.post('/api/products', (req,res)=>{
     Product.create({
@@ -132,6 +128,7 @@ app.post('/api/products', (req,res)=>{
     })
 })
 
+// creates the products
 
 app.post('/api/users', (req,res)=>{
     User.create({
@@ -148,6 +145,8 @@ app.post('/api/users', (req,res)=>{
     })
 })
 
+//creates user and puts into the database
+
 app.get('/api/products' ,(req, res) =>{
     Product.findAll(). then((products)=>{
         res.json(products)
@@ -155,6 +154,8 @@ app.get('/api/products' ,(req, res) =>{
         res.send(500).send({error:'could not retrieve user'})
     })
 })
+
+// retrieves all users from database
 
 app.get('/api/users' ,(req, res) =>{
     User.findAll(). then((users)=>{
@@ -164,8 +165,12 @@ app.get('/api/users' ,(req, res) =>{
     })
 })
 
+//retrieves all users from the database
+
 
 app.set('view engine', 'ejs')
 app.set('views', 'views')
+
+//sets view engines
 
 app.listen(`${port}`,()=> console.log(`listening on ${port}`))

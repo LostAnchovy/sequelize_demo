@@ -18,7 +18,13 @@ const db = {}
 db.Sequelize = Sequelize
 db.connection = connection
 
+// db.pet = require('../models/pet.model.js')(connection,Sequelize);
+// db.product = require ('../models/product.model.js')(connection, Sequelize);
+// db.user = require ('../models/user.model.js')(connection,Sequelize);
+
 // import project models here
+
+
 // Set the relationship between the models here
 
 module.exports = db;
