@@ -1,3 +1,4 @@
+
 module.exports = (connection, Sequelize) =>{
     const User = connection.define('user', {
         firstname: {
