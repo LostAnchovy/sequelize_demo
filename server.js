@@ -10,19 +10,17 @@ var bodyparser = require('body-parser');
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({extended:false}));
 
-var connection = new Sequelize('test_db', 'root', 'root', {
-    host:'localhost',
-    dialect: 'mysql',
-    port:'3306',
-    operatorsAliases: false,
-})
 
+const db = require('./config/db.config.js')
+
+db.connection.sync()
+.then(()=>console.log('database has been synced'))
+.catch((err)=>console.log('Error creating database'))
 
 //======================Models========================//
 // Models that have been build out by hand in the test_db. Sequelize also adds backend validations which i have incorporated into the code below under validate.
-const User = connection.define('user', {
-    firstname: {type: Sequelize.STRING,},
-    lastname:{
+const User = db.connection.define('user', {
+    firstname: {
         type: Sequelize.STRING,
         allowNull: false,
         validate:{
@@ -32,17 +30,18 @@ const User = connection.define('user', {
             }
         }
     },
+    lastname:{type: Sequelize.STRING,},
     email:{type: Sequelize.STRING},
     password:{type: Sequelize.STRING},
 })
 
-const Pet = connection.define('pets',{
+const Pet = db.connection.define('pets',{
     firstname: {type: Sequelize.STRING},
     lastname:{type: Sequelize.STRING},
     breed:{type: Sequelize.STRING}
 })
 
-const Product = connection.define('products',{
+const Product = db.connection.define('products',{
     productname: {type: Sequelize.STRING},
     productdescription: {type: Sequelize.STRING},
     productimage: {type:Sequelize.BLOB},
@@ -59,9 +58,9 @@ User.beforeCreate((user)=>{
 })
 //hashes the password before it is put into the database
 
-connection.sync()
-.then(()=>console.log('database has been synced'))
-.catch((err)=>console.log('Error creating database'))
+// connection.sync()
+// .then(()=>console.log('database has been synced'))
+// .catch((err)=>console.log('Error creating database'))
 // connects to the database and provide handers and console.logs
 
 app.use(session({
@@ -69,10 +68,25 @@ app.use(session({
     resave: false,
     saveUninitialized: true
   }))
-
+// bring in express-session 
 
 app.get('/form', (req, res)=>{
     res.render('form')
+})
+app.get('/petform', (req, res)=>{
+    res.render('petform')
+})
+
+app.get ('/productform' ,(req, res) =>{
+    res.render('productform')
+})
+
+app.get ('/' ,(req, res) =>{
+    res.render('root')
+})
+
+app.get ('/home' ,(req, res) =>{
+    res.render('home')
 })
 
 app.get('/api/users', (req, res)=>{
@@ -83,9 +97,6 @@ app.get('/api/users', (req, res)=>{
     })
 })
 
-app.get('/petform', (req, res)=>{
-    res.render('petform')
-})
 
 app.post('/api/pets', (req,res)=>{
     Pet.create({
@@ -122,7 +133,6 @@ app.post('/api/products', (req,res)=>{
 })
 
 
-
 app.post('/api/users', (req,res)=>{
     User.create({
         firstname: req.body.firstname,
@@ -146,14 +156,6 @@ app.get('/api/products' ,(req, res) =>{
     })
 })
 
-app.get ('/productform' ,(req, res) =>{
-    res.render('productform')
-})
-
-app.get ('/' ,(req, res) =>{
-    res.render('root')
-})
-
 app.get('/api/users' ,(req, res) =>{
     User.findAll(). then((users)=>{
         res.json(users)
@@ -162,9 +164,6 @@ app.get('/api/users' ,(req, res) =>{
     })
 })
 
-app.get ('/home' ,(req, res) =>{
-    res.render('home')
-})
 
 app.set('view engine', 'ejs')
 app.set('views', 'views')
