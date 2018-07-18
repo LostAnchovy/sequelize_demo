@@ -1,3 +1,6 @@
+const db = ('../config/db.config.js')
+const brcypt = require('bcrypt')
+const Sequelize = require('sequelize')
 
 module.exports = (connection, Sequelize) =>{
     const User = connection.define('user', {
@@ -13,6 +16,7 @@ module.exports = (connection, Sequelize) =>{
         },
         lastname:{type: Sequelize.STRING,},
         email:{type: Sequelize.STRING},
+        username:{type: Sequelize.STRING},
         password:{type: Sequelize.STRING},
     })
     return User;

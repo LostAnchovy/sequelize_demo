@@ -1,15 +1,50 @@
-<form method="post" action ="/api/users">
-    <input placeholder="first name" type="text" name ="firstname" label="first name" required>
-    <br>
-    <br>
-    <input placeholder="last name" type="text" name ="lastname" label="last name" required>
-    <br>
-    <br>
-    <input placeholder="enter email" type="email" name="email" label="email name"> 
-    <br>  
-    <br> 
-    <input placeholder="enter password" type="password" name="password" label="password" required> 
-    <br>  
-    <br> 
-    <button type = "submit" value ="ok">Submit</button>
-</form>
+<html lang="en">
+    <head>
+        <title></title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="css/style.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+    <style>
+       .container{
+		padding: 50px;
+		background-color:whitesmoke;
+		width: 900px;
+		border-radius: 10px;
+		margin-top: 50px;
+        margin-left:auto;
+        margin-right: auto;
+	}
+    </style>
+    </head>
+<body>
+    <div class="container">
+            <form method="post" action ="/api/users">
+                <div class="form-group">
+                 <lable>First Name</lable>   
+                <input class="form-control" type="text" name ="firstname" label="first name" required>
+                </div>
+                <lable>Last Name</lable>   
+                <div class="form-group">
+                <input class="form-control" type="text" name ="lastname" label="last name" required>
+                </div>
+                <lable>Email</lable>  
+                <div class="form-group">
+                <input class="form-control" type="email" name="email" label="email name"> 
+                </div>
+                <lable>Username</lable>  
+                <div class="form-group">
+                <input class="form-control" type="text" name="username" label="username"> 
+                </div>
+                <lable>Password</lable> 
+                <div class="form-group">
+                <input class="form-control" type="password" name="password" label="password" required> 
+                </div>
+                <button class="btn btn-primary" type = "submit" value ="ok">Submit</button>
+            </form>
+    </div>
+</body>
+</html>

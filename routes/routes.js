@@ -1,6 +1,11 @@
 var express = require('express')
 var router = express.Router()
+var passport = require('passport');
+// var passportlocal = require('passport-local')
 var db = require('../config/db.config.js')
+const user = require('../controllers/user.controller')
+const pet = require('../controllers/pet.controller')
+const product = require('../controllers/product.controller.js')
 
 router.get('/form', (req, res)=>{
     res.render('form')
@@ -20,81 +25,27 @@ router.get ('/' ,(req, res) =>{
 router.get ('/home' ,(req, res) =>{
     res.render('home')
 })
-
-
-router.post('/api/pets', (req,res)=>{
-    db.pet.create({
-        firstname: req.body.firstname,
-        lastname: req.body.lastname,
-        breed: req.body.breed,
-    }). then((pet) =>{
-        res.json(pet)
-    }). catch((err)=>{
-        res.status(501).send({
-            error: "could not add new user to the database"
-        })
-    })
+router.get ('/login' ,(req, res) =>{
+    res.render('login')
 })
 
+router.post('/api/pets', pet.create);
 // creates pet and insert it into the database
 
-router.get('/api/pets', (req,res)=>{
-    db.pet.findAll().then((pet)=>{
-        res.json(pet)
-    }).catch((err)=>{
-        console.log('there was an error getting all the pets')
-    })
-})
-
+router.get('/api/pets', pet.findAll)
 // retrieves all pets
 
-router.post('/api/products', (req,res)=>{
-    db.product.create({
-        productname: req.body.productname,
-        productdescription: req.body.productdescription,
-        productimage: req.body.productimage,
-    }). then((product)=>{
-        res.json(product)
-    }). catch((err)=>{
-        res.status(501).send({error: 'problem entering product into database'})
-    })
-})
-
+router.post('/api/products', product.create);
 // creates the products
 
-router.post('/api/users', (req,res)=>{
-    db.user.create({
-        firstname: req.body.firstname,
-        lastname: req.body.lastname,
-        email: req.body.email,
-        password: req.body.password,
-    }). then((user)=>{
-        res.json(user)
-    }). catch((err)=>{
-        res.status(501).send({
-            error: "could not add new user to the database"
-        })
-    })
-})
+router.post('/api/users', user.create);
+   //creates user and puts into the database
 
-//creates user and puts into the database
+router.get('/api/products', product.findAll); 
 
-router.get('/api/products' ,(req, res) =>{
-    db.product.findAll(). then((products)=>{
-        res.json(products)
-    }).catch((err)=>{
-        res.send(500).send({error:'could not retrieve user'})
-    })
-})
+// retrieves all products from database
 
-// retrieves all users from database
-
-router.get('/api/users' ,(req, res) =>{
-    db.user.findAll(). then((users)=>{
-        res.json(users)
-    }).catch((err)=>{
-        res.send(500).send({error:'could not retrieve user'})
-    })
-})
+router.get('/api/users', user.findAll);
+// retrieves all user from database
 
 module.exports = router;
