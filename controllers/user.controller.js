@@ -50,3 +50,20 @@ exports.findAll =(req, res) =>{
         res.send(500).send({error:'could not retrieve user'})
     })
 }
+
+exports.update = (req,res) =>{
+  User.findOne({
+    where:{id:1}
+  })
+  User.update(
+      {firstname: req.body.firstname},
+      {lastname: req.body.lastname},
+      {email: req.body.email},
+      {username: req.body.username},
+      {password: req.body.password},
+  ).then(updateUser=>{
+      res.json(updateUser)
+  }).catch(err=>{
+      res.send(500).send({error: 'can not update user into database'})
+  })
+}

@@ -7,12 +7,16 @@ var bcrypt = require('bcrypt')
 var passport = require('passport');
 var Sequelize = require('sequelize');
 var mysql = require('mysql2');
+var expressValidator = require('express-validator');
+var flash = require('express-flash-messages');
+var session = require('express-session');
 var passport = require('passport');
 var Localstrategy = require('passport-local').Strategy
 var bodyparser = require('body-parser');
 const db = require('./config/db.config.js')
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({extended:false}));
+app.use(expressValidator());
 app.use(session({
     secret: 'keyboard cat',
     resave: false,
@@ -20,8 +24,13 @@ app.use(session({
   }))
 app.use(passport.initialize());
 app.use(passport.session());
-
+app.use(flash());
 app.use(require('./routes/routes.js'))
+
+// app.post('/login', passport.authenticate('local',{ 
+//   failureRedirect: '/login',
+//   successRedirect: '/success'
+// }))
 
 // passport.use( new Localstrategy, (username, password, done)=>{
 //     db.user.findone({
@@ -64,23 +73,23 @@ passport.use(new Localstrategy ((username, pass, cb)=>{
 //   done(null, user);
 // });  
 
-passport.serializeUser(function(user, cb) {
+passport.serializeUser((user, cb)=>{
     cb(null, user.id);
   });
 
-passport.deserializeUser(function(id, cb) {
-    db.user.findById(id).then(function (user) {
+passport.deserializeUser((id, cb)=> {
+    db.user.findById(id).then((user)=>{
       cb(null, user);
     });
   });
 
 
-app.use(function(req,res,next){
-    if(req.user){
-      res.locals.user = req.user.username
-    }
-    next()
-  })
+// app.use(function(req,res,next){
+//     if(req.user){
+//       res.locals.user = req.user.username
+//     }
+//     next()
+//   })
 
 
 
@@ -94,12 +103,17 @@ app.use(function(req,res,next){
 // })
 // hashes the password before it is put into the database
 
-app.use(session({
-    secret: 'keyboard cat',
-    resave: false,
-    saveUninitialized: true
-  }))
+// app.use(session({
+//     secret: 'keyboard cat',
+//     resave: false,
+//     saveUninitialized: true
+//   }))
 // bring in express-session and provide connection token
+
+// app.get('/logout', (req,res)=>{
+//   req.session.destroy();
+//   res.redirect('/')
+// })
 
 app.set('view engine', 'ejs')
 app.set('views', 'views')

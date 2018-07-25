@@ -15,7 +15,7 @@ exports.create =(req,res)=>{
         lastname: req.body.lastname,
         breed: req.body.breed,
     }). then((pet) =>{
-        res.json(pet)
+        res.redirect('/')
     }). catch((err)=>{
         res.status(501).send({
             error: "could not add new user to the database"
